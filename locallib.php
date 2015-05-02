@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once(dirname(__FILE__).'/lib.php');
 require_once($CFG->dirroot.'/mod/book/locallib.php');
-require_once(dirname(__FILE__).'/EPub.php');
+require_once(dirname(__FILE__).'/PHPePub/EPub.php');
 
 
 /**
