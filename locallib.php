@@ -165,7 +165,7 @@ function booktool_exportepub_prepare_files($book, $context) {
     // Create CSS file
     $css_file_record = array('contextid'=>$context->id, 'component'=>'booktool_exportepub', 'filearea'=>'temp',
             'itemid'=>$book->revision, 'filepath'=>"/", 'filename'=>'styles.css');
-    $fs->create_file_from_pathname($css_file_record, dirname(__FILE__).'/imscp.css');
+    $fs->create_file_from_pathname($css_file_record, dirname(__FILE__).'/epub.css');
 
     // Need to retrieve contents of CSS file as a string for ePub
     // since it won't read in the file directly.
