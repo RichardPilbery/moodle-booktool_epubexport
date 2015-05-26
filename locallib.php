@@ -28,11 +28,11 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once(dirname(__FILE__).'/lib.php');
 require_once($CFG->dirroot.'/mod/book/locallib.php');
-require_once(dirname(__FILE__).'/PHPePub/EPub.php');
+require_once(dirname(__FILE__).'/classes/phpepub/EPub.php');
 
 
 /**
- * Export one ebook as IMSCP package
+ * Export one ebook as epub package
  *
  * @param stdClass $ebook ebook instance
  * @param context_module $context
@@ -43,6 +43,15 @@ function booktool_exportepub_build_package($book, $context) {
     global $ebook;
 
     $ebook = new EPub(EPub::BOOK_VERSION_EPUB3, "en", EPub::DIRECTION_LEFT_TO_RIGHT); // Default is ePub 2
+    $ebook->setTitle(strip_tags($book->name)); //OPF file does not like extra tags!
+
+    $metadata = booktool_exportepub_parse_info($book->intro);
+    $ebook->setIdentifier($metadata['uuid'],"UUID"); // Could also be the ISBN number, prefered for published books, or a UUID.
+   // $book->setLanguage("en"); // Not needed, but included for the example, Language is mandatory, but EPub defaults to "en". Use RFC3066 Language codes, such as "en", "da", "fr" etc.
+    
+    $ebook->setDescription($metadata['description']);
+    $ebook->setAuthor($metadata['author'], $metadata['authorrev']);
+    $ebook->setPublisher($metadata['publisher']);
 
     $fs = get_file_storage();
 
@@ -70,8 +79,7 @@ function booktool_exportepub_build_package($book, $context) {
         $cover_itemid = $file->get_itemid();
         $cover_contenthash = $file->get_contenthash();
         $addFile = $fs->get_file($context->id, 'booktool_exportepub', 'temp', $cover_itemid, $cover_filepath, $cover_filename);
-        //var_dump($addFile);
-       // $cover_fullPath = $CFG->dataroot."/filedir/".$cover_contenthash[0].$cover_contenthash[1]."/".$cover_contenthash[2].$cover_contenthash[3]."/".$cover_contenthash;
+
         if($cover_mimetype == 'image/jpeg' || $cover_mimetype == 'image/png') {
             $ebook->setCoverImage($cover_filename, $file->get_content(), $cover_mimetype);
         }
@@ -123,16 +131,6 @@ function booktool_exportepub_prepare_files($book, $context) {
     global $CFG, $DB;
     global $ebook;
 
-    $ebook->setTitle(strip_tags($book->name)); //OPF file does not like extra tags!
-
-    $metadata = parse_info($book->intro);
-    $ebook->setIdentifier($metadata['uuid'],"UUID"); // Could also be the ISBN number, prefered for published books, or a UUID.
-   // $book->setLanguage("en"); // Not needed, but included for the example, Language is mandatory, but EPub defaults to "en". Use RFC3066 Language codes, such as "en", "da", "fr" etc.
-    
-    $ebook->setDescription($metadata['description']);
-    $ebook->setAuthor($metadata['author'], $metadata['authorrev']);
-    $ebook->setPublisher($metadata['publisher']);
-
     $fs = get_file_storage();
 
     $temp_file_record = array('contextid'=>$context->id, 'component'=>'booktool_exportepub', 'filearea'=>'temp', 'itemid'=>$book->revision);
@@ -165,7 +163,9 @@ function booktool_exportepub_prepare_files($book, $context) {
     // Create CSS file
     $css_file_record = array('contextid'=>$context->id, 'component'=>'booktool_exportepub', 'filearea'=>'temp',
             'itemid'=>$book->revision, 'filepath'=>"/", 'filename'=>'styles.css');
-    $fs->create_file_from_pathname($css_file_record, dirname(__FILE__).'/epub.css');
+    //$fs->create_file_from_pathname($css_file_record, dirname(__FILE__).'/epub.css');
+    // Using bootstrap instead
+    $fs->create_file_from_pathname($css_file_record, dirname(__FILE__).'/bootstrap.css');
 
     // Need to retrieve contents of CSS file as a string for ePub
     // since it won't read in the file directly.
@@ -230,7 +230,7 @@ function booktool_exportepub_chapter_content($chapter, $context) {
 
  **/
 
- function parse_info($info) {
+ function booktool_exportepub_parse_info($info) {
     global $book;
     $metdata = array();
     // Set defaults

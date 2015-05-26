@@ -25,6 +25,6 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'booktool_exportepub'; // Full name of the plugin (used for diagnostics)
-$plugin->version   = 2015032801; // The current plugin version (Date: YYYYMMDDXX)
+$plugin->version   = 2015032802; // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2014051205; // Requires this Moodle version
 $plugin->maturity     = MATURITY_BETA;
