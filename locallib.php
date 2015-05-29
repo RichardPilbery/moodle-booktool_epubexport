@@ -59,9 +59,6 @@ function booktool_exportepub_build_package($book, $context) {
         return $packagefile;
     }
 
-    //var_dump($book->intro);
-    //exit;
-
     // fix structure and test if chapters present
     if (!book_preload_chapters($book)) {
         print_error('nochapters', 'booktool_exportepub');
@@ -78,7 +75,6 @@ function booktool_exportepub_build_package($book, $context) {
         $cover_mimetype = $file->get_mimetype();
         $cover_itemid = $file->get_itemid();
         $cover_contenthash = $file->get_contenthash();
-        $addFile = $fs->get_file($context->id, 'booktool_exportepub', 'temp', $cover_itemid, $cover_filepath, $cover_filename);
 
         if($cover_mimetype == 'image/jpeg' || $cover_mimetype == 'image/png') {
             $ebook->setCoverImage($cover_filename, $file->get_content(), $cover_mimetype);
@@ -98,7 +94,6 @@ function booktool_exportepub_build_package($book, $context) {
 
         $ebook->addLargeFile($filename,$filename,$fullPath,$mimetype);
     }
-    //$book->buildTOC(NULL, "toc", "Table of Contents", TRUE, TRUE);
     $ebook->finalize(); // Finalize the book, and build the archive.
     $zipData = $ebook->sendBook(clean_filename($book->name));
 
