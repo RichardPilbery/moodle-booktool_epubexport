@@ -17,7 +17,7 @@
 /**
  * Book imscp export lib
  *
- * @package    ebooktool_exportepub
+ * @package    booktool_exportepub
  * @copyright  2001-3001 Antonio Vicent          {@link http://ludens.es}
  * @copyright  2001-3001 Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  2011 Petr Skoda                   {@link http://skodak.org}
@@ -47,17 +47,11 @@ function booktool_exportepub_build_package($book, $context) {
 
     $metadata = booktool_exportepub_parse_info($book->intro);
     $ebook->setIdentifier($metadata['uuid'],"UUID"); // Could also be the ISBN number, prefered for published books, or a UUID.
-   // $book->setLanguage("en"); // Not needed, but included for the example, Language is mandatory, but EPub defaults to "en". Use RFC3066 Language codes, such as "en", "da", "fr" etc.
-    
     $ebook->setDescription($metadata['description']);
     $ebook->setAuthor($metadata['author'], $metadata['authorrev']);
     $ebook->setPublisher($metadata['publisher']);
 
     $fs = get_file_storage();
-
-    if ($packagefile = $fs->get_file($context->id, 'booktool_exportepub', 'package', $book->revision, '/', 'imscp.zip')) {
-        return $packagefile;
-    }
 
     // fix structure and test if chapters present
     if (!book_preload_chapters($book)) {
@@ -75,6 +69,7 @@ function booktool_exportepub_build_package($book, $context) {
         $cover_mimetype = $file->get_mimetype();
         $cover_itemid = $file->get_itemid();
         $cover_contenthash = $file->get_contenthash();
+        $addFile = $fs->get_file($context->id, 'booktool_exportepub', 'temp', $cover_itemid, $cover_filepath, $cover_filename);
 
         if($cover_mimetype == 'image/jpeg' || $cover_mimetype == 'image/png') {
             $ebook->setCoverImage($cover_filename, $file->get_content(), $cover_mimetype);
@@ -88,12 +83,12 @@ function booktool_exportepub_build_package($book, $context) {
         $mimetype = $file->get_mimetype();
         $itemid = $file->get_itemid();
         $contenthash = $file->get_contenthash();
-        $addFile = $fs->get_file($context->id, 'booktool_exportepub', 'temp', $itemid, $filepath, $filename);
+        //$addFile = $fs->get_file($context->id, 'booktool_exportepub', 'temp', $itemid, $filepath, $filename);
         //var_dump($addFile);
         $fullPath = $CFG->dataroot."/filedir/".$contenthash[0].$contenthash[1]."/".$contenthash[2].$contenthash[3]."/".$contenthash;
-
         $ebook->addLargeFile($filename,$filename,$fullPath,$mimetype);
     }
+    //$book->buildTOC(NULL, "toc", "Table of Contents", TRUE, TRUE);
     $ebook->finalize(); // Finalize the book, and build the archive.
     $zipData = $ebook->sendBook(clean_filename($book->name));
 
@@ -110,10 +105,8 @@ function booktool_exportepub_build_package($book, $context) {
     $revisions = $DB->get_records_sql($sql, $params);
     foreach ($revisions as $rev => $unused) {
         $fs->delete_area_files($context->id, 'booktool_exportepub', 'temp', $rev);
-        $fs->delete_area_files($context->id, 'booktool_exportepub', 'package', $rev);
     }
 
-    return $packagefile;
 }
 
 /**
@@ -135,8 +128,6 @@ function booktool_exportepub_prepare_files($book, $context) {
     $chapterresources = array();
 
     foreach ($chapters as $chapter) {
-
-        // Collate all files relating to chapter
         //$chapterresources[$chapter->id] = array();
         $files = $fs->get_area_files($context->id, 'mod_book', 'chapter', $chapter->id, "sortorder, itemid, filepath, filename", false);
         foreach ($files as $file) {
@@ -160,7 +151,7 @@ function booktool_exportepub_prepare_files($book, $context) {
             'itemid'=>$book->revision, 'filepath'=>"/", 'filename'=>'styles.css');
     //$fs->create_file_from_pathname($css_file_record, dirname(__FILE__).'/epub.css');
     // Using bootstrap instead
-    $fs->create_file_from_pathname($css_file_record, dirname(__FILE__).'/bootstrap.css');
+    $fs->create_file_from_pathname($css_file_record, dirname(__FILE__).'/epub-bootstrap.css');
 
     // Need to retrieve contents of CSS file as a string for ePub
     // since it won't read in the file directly.
@@ -170,8 +161,6 @@ function booktool_exportepub_prepare_files($book, $context) {
     $ebook->addCSSFile("styles.css","css1",$cssData);
 
 }
-
-
 
 /**
   Returns the html contents of one ebook's chapter to be exported as IMSCP
@@ -211,7 +200,6 @@ function booktool_exportepub_chapter_content($chapter, $context) {
 
     return $content;
 }
-
 
 /**
   Parses the intro text of the book looking for tags with:
