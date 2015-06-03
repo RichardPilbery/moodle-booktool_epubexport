@@ -15,12 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Book IMSCP export plugin
+ * Book epub export plugin
  *
- * @package    ebooktool_exportepub
+ * @package    booktool_exportepub
  * @copyright  2001-3001 Antonio Vicent          {@link http://ludens.es}
  * @copyright  2001-3001 Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  2011 Petr Skoda                   {@link http://skodak.org}
+ * @copyright  2015 Richard Pilbery {@link https://about.me/richardpilbery}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -45,6 +46,6 @@ require_capability('booktool/exportepub:export', $context);
 
 \booktool_exportepub\event\book_exported::create_from_book($book, $context)->trigger();
 
-booktool_exportepub_build_package($book, $context);
+$file = booktool_exportepub_build_package($book, $context);
 
-//send_stored_file($file, 10, 0, true, array('filename' => strip_tags($ebook->intro).'.zip'));
+send_stored_file($file, 10, 0, true, array('filename' => clean_filename($book->name).'.epub'));

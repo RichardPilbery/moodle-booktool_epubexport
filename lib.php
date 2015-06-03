@@ -15,10 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * IMSCP export lib
+ * epub export lib
  *
- * @package    ebooktool_exportepub
+ * @package    booktool_exportepub
  * @copyright  2011 Petr Skoda {@link http://skodak.org}
+ * @copyright  2015 Richard Pilbery {@link https://about.me/richardpilbery}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,7 +33,7 @@ defined('MOODLE_INTERNAL') || die;
  */
 function booktool_exportepub_extend_settings_navigation(settings_navigation $settings, navigation_node $node) {
     global $PAGE;
-
+    
     if (has_capability('booktool/exportepub:export', $PAGE->cm->context)) {
         $url = new moodle_url('/mod/book/tool/exportepub/index.php', array('id'=>$PAGE->cm->id));
         $icon = new pix_icon('generate', '', 'booktool_exportepub', array('class'=>'icon'));
