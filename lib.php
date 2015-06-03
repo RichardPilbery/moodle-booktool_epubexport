@@ -36,7 +36,7 @@ function booktool_exportepub_extend_settings_navigation(settings_navigation $set
     
     if (has_capability('booktool/exportepub:export', $PAGE->cm->context)) {
         $url = new moodle_url('/mod/book/tool/exportepub/index.php', array('id'=>$PAGE->cm->id));
-        $icon = new pix_icon('generate', '', 'booktool_exportepub', array('class'=>'icon'));
+        $icon = new pix_icon('exportepublogo', '', 'booktool_exportepub', array('class'=>'icon'));
         $node->add(get_string('generateepub', 'booktool_exportepub'), $url, navigation_node::TYPE_SETTING, null, null, $icon);
     }
 }
