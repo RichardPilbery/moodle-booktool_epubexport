@@ -17,7 +17,7 @@
 /**
  * Book module capability definition
  *
- * @package    ebooktool_exportepub
+ * @package    booktool_epubexport
  * @copyright  2011 Petr Skoda {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $capabilities = array(
-    'booktool/exportepub:export' => array(
+    'booktool/epubexport' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE
     ),

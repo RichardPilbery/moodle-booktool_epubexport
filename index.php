@@ -17,7 +17,7 @@
 /**
  * Book epub export plugin
  *
- * @package    booktool_exportepub
+ * @package    booktool_epubexport
  * @copyright  2001-3001 Antonio Vicent          {@link http://ludens.es}
  * @copyright  2001-3001 Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  2011 Petr Skoda                   {@link http://skodak.org}
@@ -36,13 +36,13 @@ $cm = get_coursemodule_from_id('book', $id, 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 $book = $DB->get_record('book', array('id'=>$cm->instance), '*', MUST_EXIST);
 
-$PAGE->set_url('/mod/book/tool/exportepub/index.php', array('id'=>$id));
+$PAGE->set_url('/mod/book/tool/epubexport/index.php', array('id'=>$id));
 
 require_login($course, false, $cm);
 
 $context = context_module::instance($cm->id);
 require_capability('mod/book:read', $context);
-require_capability('booktool/exportepub:export', $context);
+require_capability('booktool/epubexport:export', $context);
 
 \booktool_exportepub\event\book_exported::create_from_book($book, $context)->trigger();
 

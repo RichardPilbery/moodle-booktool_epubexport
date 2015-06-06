@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * exportepub ebooktool language strings
+ * epubexport booktool language strings
  *
- * @package    ebooktool_exportepub
+ * @package    booktool_epubexport
  * @copyright  2011 Petr Skoda {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $string['eventebookexported'] = 'E-Book exported';
-$string['exportepub:export'] = 'Export ebook as an ePUB';
+$string['epubexport:export'] = 'Export ebook as an ePUB';
 $string['generateepub'] = 'Create ePUB';
 $string['nochapters'] = 'No ebook chapters found, so unable to create ePUB.';
 $string['pluginname'] = 'ePUB ebook export';

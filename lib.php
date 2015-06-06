@@ -17,7 +17,7 @@
 /**
  * epub export lib
  *
- * @package    booktool_exportepub
+ * @package    booktool_epubexport
  * @copyright  2011 Petr Skoda {@link http://skodak.org}
  * @copyright  2015 Richard Pilbery {@link https://about.me/richardpilbery}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -34,9 +34,9 @@ defined('MOODLE_INTERNAL') || die;
 function booktool_exportepub_extend_settings_navigation(settings_navigation $settings, navigation_node $node) {
     global $PAGE;
     
-    if (has_capability('booktool/exportepub:export', $PAGE->cm->context)) {
-        $url = new moodle_url('/mod/book/tool/exportepub/index.php', array('id'=>$PAGE->cm->id));
-        $icon = new pix_icon('exportepublogo', '', 'booktool_exportepub', array('class'=>'icon'));
-        $node->add(get_string('generateepub', 'booktool_exportepub'), $url, navigation_node::TYPE_SETTING, null, null, $icon);
+    if (has_capability('booktool/epubexport:export', $PAGE->cm->context)) {
+        $url = new moodle_url('/mod/book/tool/epubexport/index.php', array('id'=>$PAGE->cm->id));
+        $icon = new pix_icon('epubexportlogo', '', 'booktool_epubexport', array('class'=>'icon'));
+        $node->add(get_string('generateepub', 'booktool_epubexport'), $url, navigation_node::TYPE_SETTING, null, null, $icon);
     }
 }

@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Export to IMSCP ebooktool log events definition
+ * Export to EPUB log events definition
  *
- * @package    ebooktool_exportepub
+ * @package    booktool_epubexport
  * @copyright  2012 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,5 +25,5 @@
 defined('MOODLE_INTERNAL') || die();
 
 $logs = array(
-    array('module'=>'book', 'action'=>'exportepub', 'mtable'=>'book', 'field'=>'name')
+    array('module'=>'book', 'action'=>'epubexport', 'mtable'=>'book', 'field'=>'name')
 );

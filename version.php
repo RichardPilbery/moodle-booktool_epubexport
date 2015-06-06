@@ -15,16 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Book IMSCP export plugin version info
+ * Book EPUB export plugin version info
  *
- * @package    ebooktool_exportepub
+ * @package    ebooktool_epubexport
  * @copyright  2011 Petr Skoda {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->component = 'booktool_exportepub'; // Full name of the plugin (used for diagnostics)
+$plugin->component = 'booktool_epubexport'; // Full name of the plugin (used for diagnostics)
 $plugin->version   = 2015060300; // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2014051205; // Requires this Moodle version
-$plugin->maturity     = MATURITY_STABLE;
+$plugin->maturity  = MATURITY_STABLE;
+$plugin->release   = 'v0.1' // First version of this plugin
