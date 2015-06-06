@@ -44,8 +44,8 @@ $context = context_module::instance($cm->id);
 require_capability('mod/book:read', $context);
 require_capability('booktool/epubexport:export', $context);
 
-\booktool_exportepub\event\book_exported::create_from_book($book, $context)->trigger();
+\booktool_epubexport\event\book_exported::create_from_book($book, $context)->trigger();
 
-$file = booktool_exportepub_build_package($book, $context);
+$file = booktool_epubexport_build_package($book, $context);
 
 send_stored_file($file, 10, 0, true, array('filename' => clean_filename($book->name).'.epub'));

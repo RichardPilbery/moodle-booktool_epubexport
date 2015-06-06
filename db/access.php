@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $capabilities = array(
-    'booktool/epubexport' => array(
+    'booktool/epubexport:export' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE
     ),

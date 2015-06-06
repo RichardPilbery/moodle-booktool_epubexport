@@ -15,20 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * ebooktool_exportepub ebook exported event.
+ * booktool_epubexport EPUB exported event.
  *
- * @package    ebooktool_exportepub
+ * @package    booktool_epubexport
  * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace booktool_exportepub\event;
+namespace booktool_epubexport\event;
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * ebooktool_exportepub ebook exported event class.
  *
- * @package    ebooktool_exportepub
+ * @package    booktool_epubexport
  * @since      Moodle 2.6
  * @copyright  2013 Frédéric Massart
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -69,7 +69,7 @@ class book_exported extends \core\event\base {
      * @return array|null
      */
     protected function get_legacy_logdata() {
-        return array($this->courseid, 'book', 'exportepub', 'tool/exportepub/index.php?id=' . $this->contextinstanceid,
+        return array($this->courseid, 'book', 'exportepub', 'tool/epubexport/index.php?id=' . $this->contextinstanceid,
             $this->objectid, $this->contextinstanceid);
     }
 
@@ -79,7 +79,7 @@ class book_exported extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventbookexported', 'booktool_exportepub');
+        return get_string('eventbookexported', 'booktool_epubexport');
     }
 
     /**
@@ -88,7 +88,7 @@ class book_exported extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/book/tool/exportepub/index.php', array('id' => $this->contextinstanceid));
+        return new \moodle_url('/mod/book/tool/epubexport/index.php', array('id' => $this->contextinstanceid));
     }
 
     /**

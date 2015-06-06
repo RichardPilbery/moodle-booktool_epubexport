@@ -28,4 +28,4 @@ $plugin->component = 'booktool_epubexport'; // Full name of the plugin (used for
 $plugin->version   = 2015060300; // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2014051205; // Requires this Moodle version
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v0.1' // First version of this plugin
+$plugin->release   = 'v0.1'; // First version of this plugin
