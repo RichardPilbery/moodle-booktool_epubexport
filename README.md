@@ -14,11 +14,11 @@ You can include a cover photo and metadata for an ePUB export by using the 'Edit
 
 Hopefully, this plugin will be available on the [Moodle plugins](https://moodle.org/plugins/) page soon, but in the meantime, you can install the plugin by taking the following steps:
 
-1 Download the plugin files from [GitHub](https://github.com/RichardPilbery/moodle-booktool_epubexport/archive/master.zip)
-2 Unzip the file and rename it: epubexport
-3 Zip the file again
-4 Head to your Moodle site and select Site administration > Plugins > Install plugins
-5 Depending on your version, select Plugin type as: Book / Book tool (booktool)
-6 Drag the zip file onto the ZIP package window
-7 Tick/check the Acknowledgement box
-8 Click the Install plugin from ZIP file button
+1. Download the plugin files from [GitHub](https://github.com/RichardPilbery/moodle-booktool_epubexport/archive/master.zip)
+2. Unzip the file and rename it: epubexport
+3. Zip the file again
+4. Head to your Moodle site and select Site administration > Plugins > Install plugins
+5. Depending on your version, select Plugin type as: Book / Book tool (booktool)
+6. Drag the zip file onto the ZIP package window
+7. Tick/check the Acknowledgement box
+8. Click the Install plugin from ZIP file button
