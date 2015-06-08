@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$string['eventebookexported'] = 'E-Book exported';
+$string['eventbookexported'] = 'E-Book exported';
 $string['epubexport:export'] = 'Export ebook as an ePUB';
 $string['generateepub'] = 'Create ePUB';
 $string['nochapters'] = 'No ebook chapters found, so unable to create ePUB.';
