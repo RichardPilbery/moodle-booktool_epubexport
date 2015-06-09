@@ -130,7 +130,7 @@ function booktool_epubexport_prepare_files($book, $context) {
     <rootfiles>
         <rootfile full-path="CONTENTS/package.opf" media-type="application/oebps-package+xml" />
     </rootfiles>' . "\n";
-    $container_string .= "</container>";
+    $containerstring .= "</container>";
     $fs->create_file_from_string($containerrecord, $containerstring);
 
     // Obtain book chapters from the database.
