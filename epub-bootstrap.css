@@ -65,7 +65,7 @@ sub {
 }
 
 img {
-  width: auto\9;
+  width: auto;
   height: auto;
   max-width: 100%;
   vertical-align: middle;
@@ -2137,7 +2137,7 @@ button.close {
 
 .btn:active,
 .btn.active {
-  background-color: #cccccc \9;
+  background-color: #cccccc;
 }
 
 
@@ -2271,7 +2271,7 @@ input[type="button"].btn-block {
 
 .btn-primary:active,
 .btn-primary.active {
-  background-color: #003399 \9;
+  background-color: #003399;
 }
 
 .btn-warning {
@@ -2302,7 +2302,7 @@ input[type="button"].btn-block {
 
 .btn-warning:active,
 .btn-warning.active {
-  background-color: #c67605 \9;
+  background-color: #c67605;
 }
 
 .btn-danger {
@@ -2333,7 +2333,7 @@ input[type="button"].btn-block {
 
 .btn-danger:active,
 .btn-danger.active {
-  background-color: #942a25 \9;
+  background-color: #942a25;
 }
 
 .btn-success {
@@ -2364,7 +2364,7 @@ input[type="button"].btn-block {
 
 .btn-success:active,
 .btn-success.active {
-  background-color: #408140 \9;
+  background-color: #408140;
 }
 
 .btn-info {
@@ -2395,7 +2395,7 @@ input[type="button"].btn-block {
 
 .btn-info:active,
 .btn-info.active {
-  background-color: #24748c \9;
+  background-color: #24748c;
 }
 
 .btn-inverse {
@@ -2426,7 +2426,7 @@ input[type="button"].btn-block {
 
 .btn-inverse:active,
 .btn-inverse.active {
-  background-color: #080808 \9;
+  background-color: #080808;
 }
 
 

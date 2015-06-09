@@ -30,13 +30,13 @@ require_once(dirname(__FILE__).'/locallib.php');
 require_once($CFG->dirroot.'/mod/book/locallib.php');
 require_once($CFG->libdir.'/filelib.php');
 
-$id = required_param('id', PARAM_INT);           // Course Module ID
+$id = required_param('id', PARAM_INT); // Course Module ID.
 
 $cm = get_coursemodule_from_id('book', $id, 0, false, MUST_EXIST);
-$course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
-$book = $DB->get_record('book', array('id'=>$cm->instance), '*', MUST_EXIST);
+$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
+$book = $DB->get_record('book', array('id' => $cm->instance), '*', MUST_EXIST);
 
-$PAGE->set_url('/mod/book/tool/epubexport/index.php', array('id'=>$id));
+$PAGE->set_url('/mod/book/tool/epubexport/index.php', array('id' => $id));
 
 require_login($course, false, $cm);
 

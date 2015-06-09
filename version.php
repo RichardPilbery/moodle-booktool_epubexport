@@ -17,15 +17,15 @@
 /**
  * Book EPUB export plugin version info
  *
- * @package    ebooktool_epubexport
- * @copyright  2011 Petr Skoda {@link http://skodak.org}
+ * @package    booktool_epubexport
+ * @copyright  2015 Richard Pilbery
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->component = 'booktool_epubexport'; // Full name of the plugin (used for diagnostics)
-$plugin->version   = 2015060300; // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2014051205; // Requires this Moodle version
+$plugin->component = 'booktool_epubexport'; // Full name of the plugin (used for diagnostics).
+$plugin->version   = 2015060900; // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2014051205; // Requires this Moodle version.
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v0.1'; // First version of this plugin
+$plugin->release   = '0.11'; // First version of this plugin.

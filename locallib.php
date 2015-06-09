@@ -43,45 +43,49 @@ function booktool_epubexport_build_package($book, $context) {
     $fs = get_file_storage();
 
     if ($packagefile = $fs->get_file($context->id, 'booktool_epubexport', 'package', $book->revision, '/', 'epub.zip')) {
-       // return $packagefile;
+        return $packagefile;
     }
 
-    // fix structure and test if chapters present
+    // Fix structure and test if chapters present.
     if (!book_preload_chapters($book)) {
         print_error('nochapters', 'booktool_epubexport');
     }
 
-    // Prepare the files associated with each chapter...
-    // ... and create files with the chapter content.
+    // Prepare the files associated with each chapter and ...
+    // Create files with the chapter content.
     booktool_epubexport_prepare_files($book, $context);
 
     $packer = get_file_packer('application/zip');
     $areafiles = $fs->get_area_files($context->id, 'booktool_epubexport', 'temp', $book->revision, 'timecreated DESC', false);
     $files = array();
     foreach ($areafiles as $file) {
-        if($file->get_filename() == 'mimetype') {
+        if ($file->get_filename() == 'mimetype') {
             $path = '/mimetype';
-        }
-        else if ($file->get_filename() == 'container.xml') {
+        } else if ($file->get_filename() == 'container.xml') {
             $path = '/META-INF/container.xml';
-        }
-        else {
+        } else {
             $path = '/CONTENTS/'.$file->get_filename();
         }
         $files[$path] = $file;
     }
 
     unset($areafiles);
-    $packagefile = $packer->archive_to_storage($files, $context->id, 'booktool_epubexport', 'package', $book->revision, '/', 'epub.zip');
+    $packagefile = $packer->archive_to_storage($files,
+                                               $context->id,
+                                               'booktool_epubexport',
+                                               'package',
+                                               $book->revision,
+                                               '/',
+                                               'epub.zip');
 
-    // drop temp area
+    // Drop temp area.
     $fs->delete_area_files($context->id, 'booktool_epubexport', 'temp', $book->revision);
 
-    // delete older versions
+    // Delete older versions.
     $sql = "SELECT DISTINCT itemid
               FROM {files}
              WHERE contextid = :contextid AND component = 'booktool_epubexport' AND itemid < :revision";
-    $params = array('contextid'=>$context->id, 'revision'=>$book->revision);
+    $params = array('contextid' => $context->id, 'revision' => $book->revision);
     $revisions = $DB->get_records_sql($sql, $params);
     foreach ($revisions as $rev => $unused) {
         $fs->delete_area_files($context->id, 'booktool_epubexport', 'temp', $rev);
@@ -103,31 +107,31 @@ function booktool_epubexport_prepare_files($book, $context) {
     $fs = get_file_storage();
 
     // Create the mimetype file for the epub.
-    $mimetype_record = array('contextid'=>$context->id, 
+    $mimetyperecord = array('contextid'=>$context->id, 
                              'component'=>'booktool_epubexport', 
                              'filearea'=>'temp',
                              'itemid'=>$book->revision, 
                              'filepath'=>"/", 
                              'filename'=>'mimetype');
 
-    $mimetype_string = 'application/epub+zip';
-    $fs->create_file_from_string($mimetype_record, $mimetype_string);
+    $mimetypestring = 'application/epub+zip';
+    $fs->create_file_from_string($mimetyperecord, $mimetypestring);
 
     // Create the container.xml file for the epub.
-    $container_record = array('contextid'=>$context->id, 
+    $containerrecord = array('contextid'=>$context->id, 
                               'component'=>'booktool_epubexport', 
                               'filearea'=>'temp',
                               'itemid'=>$book->revision, 
                               'filepath'=>"/", 
                               'filename'=>'container.xml');
 
-    $container_string = '<?xml version="1.0"?>' . "\n";
-    $container_string .= '<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+    $containerstring = '<?xml version="1.0"?>' . "\n";
+    $containerstring .= '<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
     <rootfiles>
         <rootfile full-path="CONTENTS/package.opf" media-type="application/oebps-package+xml" />
     </rootfiles>' . "\n";
     $container_string .= "</container>";
-    $fs->create_file_from_string($container_record, $container_string);
+    $fs->create_file_from_string($containerrecord, $containerstring);
 
     // Obtain book chapters from the database.
     $chapters = $DB->get_records('book_chapters', array('bookid'=>$book->id), 'pagenum');
@@ -137,9 +141,9 @@ function booktool_epubexport_prepare_files($book, $context) {
     $manifest = array();
 
     // Init integer to count number of files
-    $number_of_files = 0;
+    $numberoffiles = 0;
 
-    $temp_file_record = array('contextid'=>$context->id, 
+    $tempfilerecord = array('contextid'=>$context->id, 
                           'component'=>'booktool_epubexport', 
                           'filearea'=>'temp', 
                           'itemid'=>$book->revision);
@@ -148,9 +152,9 @@ function booktool_epubexport_prepare_files($book, $context) {
     foreach ($chapters as $chapter) {
         $files = $fs->get_area_files($context->id, 'mod_book', 'chapter', $chapter->id, "sortorder, itemid, filepath, filename", false);
         foreach ($files as $file) {
-            $temp_file_record['filepath'] = '/'.$chapter->pagenum.$file->get_filepath();
-            $fs->create_file_from_storedfile($temp_file_record, $file);
-            $number_of_files++;
+            $tempfilerecord['filepath'] = '/'.$chapter->pagenum.$file->get_filepath();
+            $fs->create_file_from_storedfile($tempfilerecord, $file);
+            $numberoffiles++;
 
             // Collect file information for package.opf manifest.
             $manifest[] = array('id'=>$file->get_filename(), 
@@ -165,31 +169,31 @@ function booktool_epubexport_prepare_files($book, $context) {
         $content = booktool_epubexport_chapter_content($chapter, $context);
 
         // Create a file called $chapter->pagenum.html from the chapter content.
-        $index_file_record = array('contextid'=>$context->id, 
-                                   'component'=>'booktool_epubexport', 
-                                   'filearea'=>'temp',
-                                   'itemid'=>$book->revision, 
-                                   'filepath'=>"/CONTENTS/", 
-                                   'filename'=>"$chapter->pagenum.html");
+        $indexfilerecord = array('contextid' => $context->id, 
+                                   'component' => 'booktool_epubexport', 
+                                   'filearea' => 'temp',
+                                   'itemid' => $book->revision, 
+                                   'filepath' => "/CONTENTS/", 
+                                   'filename' => "$chapter->pagenum.html");
 
-        $fs->create_file_from_string($index_file_record, $content);
+        $fs->create_file_from_string($indexfilerecord, $content);
 
         // Collect file information for package.opf manifest and spine
-        $manifest[] = array('id'=> 'chapter'.$chapter->pagenum, 
-                            'filename'=> $chapter->pagenum.'.html', 
-                            'mimetype'=> 'application/xhtml+xml',
+        $manifest[] = array('id' => 'chapter'.$chapter->pagenum, 
+                            'filename' => $chapter->pagenum.'.html', 
+                            'mimetype' => 'application/xhtml+xml',
                             'title' => $chapter->title);
     }
 
     // Create the stylesheet from the epub from the epub-bootstrap.css file in the plugin.
-    $css_file_record = array('contextid'=>$context->id, 
-                             'component'=>'booktool_epubexport', 
-                             'filearea'=>'temp',
-                             'itemid'=>$book->revision, 
-                             'filepath'=>"/CONTENTS/", 
-                             'filename'=>'styles.css');
+    $cssfilerecord = array('contextid' => $context->id, 
+                             'component' => 'booktool_epubexport', 
+                             'filearea' => 'temp',
+                             'itemid' => $book->revision, 
+                             'filepath' => "/CONTENTS/", 
+                             'filename' => 'styles.css');
 
-    $fs->create_file_from_pathname($css_file_record, dirname(__FILE__).'/epub-bootstrap.css');
+    $fs->create_file_from_pathname($cssfilerecord, dirname(__FILE__).'/epub-bootstrap.css');
 
     // Obtain the metadata for the epub from the book description field (called intro).
     $metadata = booktool_epubexport_parse_info($book, $context);
@@ -219,7 +223,7 @@ function booktool_epubexport_prepare_files($book, $context) {
 
     // Check if there's a cover image to add to the manifest.
     // For backwards compatability, it's also added in the metadata too.
-    $coverimage_info = array();
+    $coverimageinfo = array();
 
     if(!empty($metadata['coverimage'])) {
         $coverfile = $fs->get_file($context->id, 
@@ -227,10 +231,10 @@ function booktool_epubexport_prepare_files($book, $context) {
                                    'temp', $book->revision, 
                                     '/',
                                      $metadata['coverimage']);
-        $coverimage_info['filename'] = $coverfile->get_filename();
-        $coverimage_info['mimetype'] = $coverfile->get_mimetype();
+        $coverimageinfo['filename'] = $coverfile->get_filename();
+        $coverimageinfo['mimetype'] = $coverfile->get_mimetype();
 
-        $package .= '   <meta name="'.$coverimage_info['filename'].'" content="cover" />' . "\n";
+        $package .= '   <meta name="'.$coverimageinfo['filename'].'" content="cover" />' . "\n";
     }
 
     $package .= '  </metadata>' . "\n";
@@ -241,7 +245,7 @@ function booktool_epubexport_prepare_files($book, $context) {
 
     // Add reference to cover image is there is one.
     if(!empty($metadata['coverimage'])) {
-        $package .= '    <item id="cover" href="'.$coverimage_info['filename'].'" properties="cover-image" media-type="'.$coverimage_info['mimetype'].'" />' . "\n";
+        $package .= '    <item id="cover" href="'.$coverimageinfo['filename'].'" properties="cover-image" media-type="'.$coverimageinfo['mimetype'].'" />' . "\n";
      }
 
     // Set the manifest.
@@ -267,12 +271,12 @@ function booktool_epubexport_prepare_files($book, $context) {
     $package .= '</package>';
 
     
-    $package_file_record = array('contextid'=>$context->id, 'component'=>'booktool_epubexport', 'filearea'=>'temp',
+    $packagefilerecord = array('contextid'=>$context->id, 'component'=>'booktool_epubexport', 'filearea'=>'temp',
             'itemid'=>$book->revision, 'filepath'=>"/", 'filename'=>'package.opf');
-    $fs->create_file_from_string($package_file_record, $package);
+    $fs->create_file_from_string($packagefilerecord, $package);
 
     // Create the table of contents
-    booktool_epubexport_toc($metadata['title'], $manifest, $temp_file_record);
+    booktool_epubexport_toc($metadata['title'], $manifest, $tempfilerecord);
 
 }
 
@@ -312,9 +316,9 @@ function booktool_epubexport_chapter_content($chapter, $context) {
 
 
  /**
- * Parses book->intro and 
- *
- * @param strins $info contents of $book->intro
+ * Parses book->intro and returns string of metadata
+ * @param stdClass $book book instance
+ * @param context_module $context
  * @return array $metadata metadata for epub
  */
 function booktool_epubexport_parse_info($book, $context) {
@@ -336,18 +340,18 @@ function booktool_epubexport_parse_info($book, $context) {
     $fs = get_file_storage();
     $coverfiles = $fs->get_area_files($context->id, 'mod_book', 'intro');
     foreach ($coverfiles as $file) {
-        $cover_filename = $file->get_filename();
-        $cover_mimetype = $file->get_mimetype();
-        if($cover_mimetype == 'image/jpeg' || $cover_mimetype == 'image/png') {
+        $coverfilename = $file->get_filename();
+        $covermimetype = $file->get_mimetype();
+        if($covermimetype == 'image/jpeg' || $covermimetype == 'image/png') {
             $metadata['uuid'] = booktool_epubexport_generate_uuid($file->get_contenthash());
-            $temp_file_record = array('contextid'=>$context->id, 
-                                      'component'=>'booktool_epubexport', 
-                                      'filearea'=>'temp',
-                                      'itemid'=>$book->revision, 
-                                      'filepath'=>"/", 
-                                      'filename'=>$cover_filename);
-            $fs->create_file_from_storedfile($temp_file_record, $file);
-            $metadata['coverimage'] = $cover_filename;
+            $tempfilerecord = array('contextid' => $context->id, 
+                                      'component' => 'booktool_epubexport', 
+                                      'filearea' => 'temp',
+                                      'itemid' => $book->revision, 
+                                      'filepath' => "/", 
+                                      'filename' => $coverfilename);
+            $fs->create_file_from_storedfile($tempfilerecord, $file);
+            $metadata['coverimage'] = $coverfilename;
         }
     }
 
@@ -405,7 +409,7 @@ function booktool_epubexport_generate_uuid($hash) {
  * @param stdClass $chapters
  * @param array $temp_file_record
  */
-function booktool_epubexport_toc($title, $chapters, $temp_file_record) {
+function booktool_epubexport_toc($title, $chapters, $tempfilerecord) {
     $toc = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     $toc .= '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en" dir="ltr">' . "\n";
     $toc .= '  <head>' . "\n";
@@ -432,7 +436,7 @@ function booktool_epubexport_toc($title, $chapters, $temp_file_record) {
     $toc .= '</html>' . "\n";
 
     $fs = get_file_storage();
-    $temp_file_record['filepath'] = '/CONTENTS/';
-    $temp_file_record['filename'] = 'toc.xhtml';
-    $fs->create_file_from_string($temp_file_record, $toc);
+    $tempfilerecord['filepath'] = '/CONTENTS/';
+    $tempfilerecord['filename'] = 'toc.xhtml';
+    $fs->create_file_from_string($tempfilerecord, $toc);
 }

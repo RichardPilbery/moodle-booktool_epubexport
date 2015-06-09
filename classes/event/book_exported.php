@@ -19,6 +19,7 @@
  *
  * @package    booktool_epubexport
  * @copyright  2013 Frédéric Massart
+ * @copyright  2015 Richard Pilbery
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -48,7 +49,7 @@ class book_exported extends \core\event\base {
             'context' => $context,
             'objectid' => $book->id
         );
-        /** @var ebook_exported $event */
+
         $event = self::create($data);
         $event->add_record_snapshot('book', $book);
         return $event;

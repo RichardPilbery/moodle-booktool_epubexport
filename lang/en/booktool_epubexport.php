@@ -18,7 +18,7 @@
  * epubexport booktool language strings
  *
  * @package    booktool_epubexport
- * @copyright  2011 Petr Skoda {@link http://skodak.org}
+ * @copyright  2015 Richard Pilbery
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
