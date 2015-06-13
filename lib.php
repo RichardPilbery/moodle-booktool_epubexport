@@ -33,10 +33,10 @@ defined('MOODLE_INTERNAL') || die;
  */
 function booktool_epubexport_extend_settings_navigation(settings_navigation $settings, navigation_node $node) {
     global $PAGE;
-    
+
     if (has_capability('booktool/epubexport:export', $PAGE->cm->context)) {
-        $url = new moodle_url('/mod/book/tool/epubexport/index.php', array('id'=>$PAGE->cm->id));
-        $icon = new pix_icon('epubexportlogo', '', 'booktool_epubexport', array('class'=>'icon'));
+        $url = new moodle_url('/mod/book/tool/epubexport/index.php', array('id' => $PAGE->cm->id));
+        $icon = new pix_icon('epubexportlogo', '', 'booktool_epubexport', array('class' => 'icon'));
         $node->add(get_string('generateepub', 'booktool_epubexport'), $url, navigation_node::TYPE_SETTING, null, null, $icon);
     }
 }

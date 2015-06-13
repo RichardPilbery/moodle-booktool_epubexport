@@ -24,4 +24,4 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$logs = array(array('module'=>'book', 'action'=>'epubexport', 'mtable'=>'book', 'field'=>'name'));
+$logs = array(array('module' => 'book', 'action' => 'epubexport', 'mtable' => 'book', 'field' => 'name'));
